@@ -1,0 +1,19 @@
+name: Sync fork with upstream
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.repository == 'wntic/geo-sleuth'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge upstream main into the fork's main
+        run: gh repo sync "$GITHUB_REPOSITORY" --branch main
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN || github.token }}
